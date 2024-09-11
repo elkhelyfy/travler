@@ -1,65 +1,63 @@
-"use client"
-import React, { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from "next/image";
+import Link from "next/link";
+import { FaPlaneDeparture } from "react-icons/fa";
+import { Button } from "../ui/button";
+import { getSession } from "@/lib/getSession";
+import { logOut } from "@/app/actions/user";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { MapPinIcon, CalendarIcon, UsersIcon, UserIcon } from "lucide-react";
+import AvatarMenu from "../ui/avatarMenu";
+const Header = async () => {
+  const session = await getSession();
+  const user = session?.user;
 
-const Header = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
+  const AuthButtons = () => (
+    <div className="flex items-center space-x-2">
+      <Link href="/signin" className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-secondary text-secondary-foreground hover:bg-secondary/80 h-9 px-4 py-2">
+        Sign in
+      </Link>
+      <Link href="/signup" className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2">
+        Sign up
+      </Link>
+    </div>
+  );
   return (
     <nav className="mx-auto flex items-center justify-between p-3 lg:px-8 shadow-sm" aria-label="Global">
       <div className="flex lg:flex-1">
-        <Link href="/" className="-m-1.5 p-1.5"> {/* Use Link for homepage */}
+        <Link href="/" className="-m-1.5 p-1.5">
+          {" "}
+          {/* Use Link for homepage */}
           <span className="sr-only">Your Company</span>
-          <Image 
-            src="/images/logo.svg" 
-            width={40} 
-            height={40} 
-            alt='Your Company Logo' 
+          <Image
+            src="/images/logo.svg"
+            width={40}
+            height={40}
+            alt="Your Company Logo"
             priority // Prioritize loading for better user experience
           />
         </Link>
       </div>
-
-      {/* Mobile Menu Button */}
-      <div className="flex lg:hidden">
-        <button 
-          type="button" 
-          className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-          onClick={toggleMobileMenu} 
-          aria-expanded={isMobileMenuOpen}
-        >
-          <span className="sr-only">
-            {isMobileMenuOpen ? 'Close main menu' : 'Open main menu'} 
-          </span>
-          {/* You might want to consider a more accessible icon here, or at least add a descriptive 'aria-label' */}
-          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-          </svg>
-        </button>
+      <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+        <nav className="flex items-center justify-between space-x-4">
+          <div> {user?.name} </div>
+          {!user ? (
+            <>
+              <AuthButtons />
+            </>
+          ) : (
+            <>
+              <Button variant="outline" className="hidden sm:flex">
+                <FaPlaneDeparture className="mr-2 h-4 w-4" />
+                Create New Trip
+              </Button>
+              <AvatarMenu />
+              <form action={logOut}>
+                <Button>Sign out</Button>
+              </form>
+            </>
+          )}
+        </nav>
       </div>
-
-      {/* Navigation Links (hidden on mobile) */}
-      <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-        <Link href="/api/register" className="text-sm font-semibold leading-6 text-gray-900">
-          Sign In <span aria-hidden="true">&rarr;</span> 
-        </Link>
-      </div>
-
-      {/* Mobile Menu (hidden by default) */}
-      {isMobileMenuOpen && (
-        <div className="lg:hidden absolute top-full left-0 w-full bg-white p-4 shadow-lg">
-          {/* Add your mobile menu links here */}
-          <Link href="/api/register" className="block text-sm font-semibold leading-6 text-gray-900 mb-2">
-            Sign In
-          </Link>
-          {/* ... other mobile menu links */}
-        </div>
-      )}
     </nav>
   );
 };

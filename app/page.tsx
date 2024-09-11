@@ -1,12 +1,25 @@
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
+import { auth } from "@/auth";
+import { getSession } from "@/lib/getSession";
+import { redirect} from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getSession();
+  const user = session?.user;
+  if(user){
+    redirect("/dashboard");
+  }
   return (
     <>
-      <main className="flex flex-col items-center justify-center min-h-screen"> {/* Center content and prevent scrolling */}
-        <div className="relative isolate px-6 pt-10 lg:px-8 z-10"> {/* Adjust padding and z-index */}
-          <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56"> {/* Adjust padding for better spacing */}
+      <main className="flex flex-col items-center justify-center min-h-screen">
+        {/* Center content and prevent scrolling */}
+        <div className="relative isolate px-6 pt-10 lg:px-8 z-10">
+          {" "}
+          {/* Adjust padding and z-index */}
+          <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+            {" "}
+            {/* Adjust padding for better spacing */}
             <div className="hidden sm:mb-8 sm:flex sm:justify-center">
               {/* Consider making this a Link if it's meant to be clickable */}
               <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
@@ -14,36 +27,31 @@ export default function Home() {
                   <span className="absolute inset-0" aria-hidden="true"></span>
                   <span aria-hidden="true">&rarr;</span>
                 </span>
-                <span className='mx-2'>travel with ease</span> 
+                <span className="mx-2">travel with ease</span>
                 <span className="font-semibold text-indigo-600">
                   <span className="absolute inset-0" aria-hidden="true"></span>
                   <span aria-hidden="true">&larr;</span>
                 </span>
               </div>
             </div>
-
             <div className="text-center">
               <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Your Personal Travel Planner</h1>
               <p className="mt-6 text-lg leading-8 text-gray-600">Roam Around will help you craft a hyper-customized travel plan. Say goodbye to the hassle of planning, and start exploring!</p>
               <div className="mt-10 flex items-center justify-center gap-x-6">
                 <Button>Get started</Button>
-                <Link 
-                  href="/plan-trip" 
-                  className="text-sm font-semibold leading-6 text-gray-900"
-                >
+                <Link href="/plan-trip" className="text-sm font-semibold leading-6 text-gray-900">
                   Plan a trip <span aria-hidden="true">→</span>
                 </Link>
               </div>
             </div>
           </div>
         </div>
-
         {/* Background gradients */}
         <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
           <div
             className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
             style={{
-              clipPath: "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"
+              clipPath: "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
             }}
           ></div>
         </div>
@@ -51,11 +59,11 @@ export default function Home() {
           <div
             className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
             style={{
-              clipPath: "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"
+              clipPath: "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
             }}
           ></div>
         </div>
-      </main> 
+      </main>
     </>
   );
 }
